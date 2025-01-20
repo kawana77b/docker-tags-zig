@@ -1,0 +1,88 @@
+.{
+    // This is the default name used by packages depending on this one. For
+    // example, when a user runs `zig fetch --save <url>`, this field is used
+    // as the key in the `dependencies` table. Although the user can choose a
+    // different name, most users will stick with this provided value.
+    //
+    // It is redundant to include "zig" in this name because it is already
+    // within the Zig package namespace.
+    .name = "docker-tags",
+
+    // This is a [Semantic Version](https://semver.org/).
+    // In a future version of Zig it will be used for package deduplication.
+    .version = "0.1.0",
+
+    // This field is optional.
+    // This is currently advisory only; Zig does not yet do anything
+    // with this value.
+    //.minimum_zig_version = "0.11.0",
+
+    // This field is optional.
+    // Each dependency must either provide a `url` and `hash`, or a `path`.
+    // `zig build --fetch` can be used to fetch all dependencies of a package, recursively.
+    // Once all dependencies are fetched, `zig build` no longer requires
+    // internet connectivity.
+    .dependencies = .{
+        .chroma = .{
+            .url = "https://github.com/adia-dev/chroma-zig/archive/c8cd1144aa800f87db3c4bee3d1f0fa0e8c96feb.zip",
+            .hash = "12209a8a991121bba3b21f31d275588690dc7c0d7fa9c361fd892e782dd88e0fb2ba",
+        },
+        .clap = .{
+            .url = "https://github.com/Hejsil/zig-clap/archive/refs/heads/release-0.9.1.zip",
+            .hash = "122062d301a203d003547b414237229b09a7980095061697349f8bef41be9c30266b",
+        },
+        .prettytable = .{
+            .url = "https://github.com/dying-will-bullet/prettytable-zig/archive/46b6ad9b5970def35fa43c9613cd244f28862fa9.zip",
+            .hash = "122098d444c9c7112c66481e7655bb5389829c67e04b280a029200545e1971187443",
+        },
+        .zul = .{
+            .url = "https://github.com/karlseguin/zul/archive/1cb43e85cc812ecbbfaf11b11d0061cd065d9e1c.zip",
+            .hash = "1220288cbd5e3bad1b2b0a4ceb38b2bcdb58ba22fbf95d851e7de6357217a0fc2af5",
+        },
+        // See `zig fetch --save <url>` for a command-line interface for adding dependencies.
+        //.example = .{
+        //    // When updating this field to a new URL, be sure to delete the corresponding
+        //    // `hash`, otherwise you are communicating that you expect to find the old hash at
+        //    // the new URL.
+        //    .url = "https://example.com/foo.tar.gz",
+        //
+        //    // This is computed from the file contents of the directory of files that is
+        //    // obtained after fetching `url` and applying the inclusion rules given by
+        //    // `paths`.
+        //    //
+        //    // This field is the source of truth; packages do not come from a `url`; they
+        //    // come from a `hash`. `url` is just one of many possible mirrors for how to
+        //    // obtain a package matching this `hash`.
+        //    //
+        //    // Uses the [multihash](https://multiformats.io/multihash/) format.
+        //    .hash = "...",
+        //
+        //    // When this is provided, the package is found in a directory relative to the
+        //    // build root. In this case the package's hash is irrelevant and therefore not
+        //    // computed. This field and `url` are mutually exclusive.
+        //    .path = "foo",
+
+        //    // When this is set to `true`, a package is declared to be lazily
+        //    // fetched. This makes the dependency only get fetched if it is
+        //    // actually used.
+        //    .lazy = false,
+        //},
+    },
+
+    // Specifies the set of files and directories that are included in this package.
+    // Only files and directories listed here are included in the `hash` that
+    // is computed for this package. Only files listed here will remain on disk
+    // when using the zig package manager. As a rule of thumb, one should list
+    // files required for compilation plus any license(s).
+    // Paths are relative to the build root. Use the empty string (`""`) to refer to
+    // the build root itself.
+    // A directory listed here means that all files within, recursively, are included.
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+        // For example...
+        //"LICENSE",
+        //"README.md",
+    },
+}

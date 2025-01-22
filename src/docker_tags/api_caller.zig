@@ -115,8 +115,8 @@ pub const ApiCaller = struct {
         var req = try exec.ApiRequestExecutor.init(allocator);
         req.image = opts.args[0];
         req.limit = opts.limit;
-        req.page_size = 100;
-        req.initial_page = 1;
+        req.page_size = exec.ApiRequestExecutor.DEFAULT_PAGE_SIZE;
+        req.initial_page = exec.ApiRequestExecutor.DEFAULT_INITIAL_PAGE;
         const schemas = try req.execute();
 
         // Sort by tag name. Generally,

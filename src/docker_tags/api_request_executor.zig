@@ -10,13 +10,16 @@ const ApiRequestError = error{
 };
 
 pub const ApiRequestExecutor = struct {
+    pub const DEFAULT_PAGE_SIZE = 100;
+    pub const DEFAULT_INITIAL_PAGE = 1;
+
     arena: *std.heap.ArenaAllocator,
 
     image: []const u8 = "",
     limit: u32 = 30,
 
-    page_size: u32 = 100,
-    initial_page: u32 = 1,
+    page_size: u32 = DEFAULT_PAGE_SIZE,
+    initial_page: u32 = DEFAULT_INITIAL_PAGE,
 
     pub fn init(allocator: std.mem.Allocator) !ApiRequestExecutor {
         const arena = try allocator.create(std.heap.ArenaAllocator);
@@ -31,7 +34,7 @@ pub const ApiRequestExecutor = struct {
         self.arena.deinit();
     }
 
-    pub fn _create_init_url(self: *ApiRequestExecutor) ![]u8 {
+    fn create_init_url(self: *ApiRequestExecutor) ![]u8 {
         const allocator = self.arena.allocator();
         const fmt = comptime "https://hub.docker.com/v2/repositories/{s}/tags?page={d}&page_size={d}";
 
@@ -52,7 +55,7 @@ pub const ApiRequestExecutor = struct {
         var client = zul.http.Client.init(allocator);
         defer client.deinit();
 
-        var access_url: []u8 = try self._create_init_url();
+        var access_url: []u8 = try self.create_init_url();
         outer: while (true) {
             var req = client.request(access_url) catch {
                 return ApiRequestError.ConnectionFailed;

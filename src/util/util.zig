@@ -105,7 +105,7 @@ pub const console = struct {
 
 /// Get a human-readable file length. cf, 3.28 GB
 pub fn get_readable_size(allocator: std.mem.Allocator, bytes: u32) ![]u8 {
-    const units = comptime [_][]const u8{ "B", "KB", "MB", "GB", "TB" };
+    const units = [_][]const u8{ "B", "KB", "MB", "GB", "TB" };
     var i: usize = 0;
     var s: f32 = @floatFromInt(bytes);
     while (s >= 1024) : (i += 1) {

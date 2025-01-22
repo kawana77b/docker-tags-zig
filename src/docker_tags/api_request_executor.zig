@@ -43,8 +43,11 @@ pub const ApiRequestExecutor = struct {
             try image_url_parts.write("library/");
         }
         try image_url_parts.write(self.image);
-
-        return try std.fmt.allocPrint(allocator, fmt, .{ image_url_parts.string(), self.initial_page, self.page_size });
+        return try std.fmt.allocPrint(allocator, fmt, .{
+            image_url_parts.string(),
+            self.initial_page,
+            @min(self.page_size, self.limit),
+        });
     }
 
     pub fn execute(self: *ApiRequestExecutor) ![]model.ImageTagInfo {

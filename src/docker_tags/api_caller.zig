@@ -119,30 +119,14 @@ pub const ApiCaller = struct {
         req.initial_page = 1;
         const schemas = try req.execute();
 
-        //--------------------------------------
-        // タグ名順で降順ソートしたリストを再作成する
-        //--------------------------------------
-        // 辞書でストア
-        var tag_maps = std.StringHashMap(model.ImageTagInfo).init(allocator);
-        defer tag_maps.deinit();
-        for (schemas) |s| {
-            try tag_maps.put(s.tag, s);
-        }
-
-        // キーでのソートリスト作成
-        var tag_sorted = std.ArrayList([]const u8).init(allocator);
-        defer tag_sorted.deinit();
-        for (schemas) |s| {
-            try tag_sorted.append(s.tag);
-        }
-        zul.sort.strings(tag_sorted.items, .desc);
-
-        // 結果リスト作成
-        var results = std.ArrayList(model.ImageTagInfo).init(allocator);
-        for (tag_sorted.items) |tag| {
-            const s = tag_maps.get(tag).?;
-            try results.append(s);
-        }
-        return RequestResult.init(self, results.items);
+        // Sort by tag name. Generally,
+        // users want to see the latest version. 1.13, 1.12... and so sorting by tag name in descending order is applied,
+        // as it is imagined to be easier to see when the tags appear in that order.
+        std.mem.sort(model.ImageTagInfo, schemas, {}, struct {
+            fn greaterThan(_: void, lhs: model.ImageTagInfo, rhs: model.ImageTagInfo) bool {
+                return std.mem.order(u8, lhs.tag, rhs.tag) == .gt;
+            }
+        }.greaterThan);
+        return RequestResult.init(self, schemas);
     }
 };

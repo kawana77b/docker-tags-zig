@@ -73,6 +73,20 @@ node   hydrogen-bullseye  amd64 / arm / arm64                    351.03 MB  2025
 ...
 ```
 
+## with Docker CLI
+
+It can be used as a docker cli plugin (v0.1.2~). That is, this tool can also be used as a subcommand of `docker`.
+
+For example:
+
+```bash
+docker tags ubuntu -d
+```
+
+To use it as a plugin, place the `docker-tags` binary in the following location:
+
+- `~/.docker/cli-plugins`
+
 ## env
 
 - It is built for Windows, Linux x86_64, and MacOS aarch64.

@@ -7,6 +7,10 @@ const cmd = @import("./cmd/cmd.zig");
 
 const APP_VERSION = build_options.version;
 const APP_NAME = build_options.app_name;
+const AUTHOER = build_options.author;
+const DESCRIPTION = "Search for image tags from DockerHub";
+
+const DOCKER_CLI_PLUGIN_METADATA_SUBCOMMAND = "docker-cli-plugin-metadata";
 
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
@@ -46,19 +50,27 @@ pub fn main() !void {
 
     // --help
     if (res.args.help != 0) {
-        const description =
+        const head_fmt =
             \\ Usage: {s} [options] <IMAGE>...
             \\
-            \\ Description: Search for image tags from DockerHub
+            \\ Description: {s}
             \\
         ;
-        std.debug.print(description ++ "\n", .{APP_NAME});
+        std.debug.print(head_fmt ++ "\n", .{ APP_NAME, DESCRIPTION });
         return clap.help(std.io.getStdErr().writer(), clap.Help, &params, .{});
     }
     // --version
     if (res.args.version != 0) {
         std.debug.print("{s} {s}\n", .{ APP_NAME, APP_VERSION });
         return;
+    }
+
+    if (res.positionals.len > 0 and std.mem.eql(u8, res.positionals[0], DOCKER_CLI_PLUGIN_METADATA_SUBCOMMAND)) {
+        return cmd.plugin_meta.run(allocator, .{
+            .version = APP_VERSION,
+            .vendor = AUTHOER,
+            .description = DESCRIPTION,
+        });
     }
 
     // set options

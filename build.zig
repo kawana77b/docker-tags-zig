@@ -5,7 +5,7 @@ pub fn build(b: *std.Build) void {
     // Currently, the version is set from the main file.
     // It will be possible to set the meta value directly in build.zon from 0.14.0 onwards...
     const build_options = b.addOptions();
-    build_options.addOption([]const u8, "version", "0.1.1");
+    build_options.addOption([]const u8, "version", "0.1.2");
     build_options.addOption([]const u8, "author", "shimarisu_121");
     build_options.addOption([]const u8, "app_name", "docker-tags");
     // build_options.addOption([]const u8, "version", @import("build.zig.zon").version);

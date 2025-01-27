@@ -2,6 +2,7 @@ const std = @import("std");
 const clap = @import("clap");
 const util = @import("../util//util.zig");
 const docker_tags = @import("../docker_tags/docker_tags.zig");
+const build_options = @import("build_options");
 
 pub const RootOptions = struct {
     const DEFULAT_LIMIT = 30;
@@ -37,6 +38,17 @@ pub const RootOptions = struct {
     }
 };
 
+const ARG_PARSE_ERROR = error{
+    DOCKER_SUBCOMMAND_NOT_FOUND,
+};
+
+// Get subcommand from app_name
+fn subcommand() ARG_PARSE_ERROR![]const u8 {
+    var iter = std.mem.split(u8, build_options.app_name, "-");
+    _ = iter.next();
+    return iter.next() orelse error.DOCKER_SUBCOMMAND_NOT_FOUND;
+}
+
 fn parse_opts(comptime T: type, allocator: std.mem.Allocator, clap_result: T) !RootOptions {
     var root_opts = RootOptions.init(allocator);
     const res = clap_result;
@@ -46,6 +58,8 @@ fn parse_opts(comptime T: type, allocator: std.mem.Allocator, clap_result: T) !R
     root_opts.browse = res.args.browse != 0;
     root_opts.detail = res.args.detail != 0;
     for (res.positionals) |pos| {
+        // When used from Docker, it skips the arguments of the subcommand.
+        if (std.mem.eql(u8, pos, try subcommand())) continue;
         try root_opts.args.append(pos);
     }
 

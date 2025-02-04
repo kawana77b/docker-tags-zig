@@ -112,10 +112,6 @@ The following third-party libraries are used:
 - [prettytable-zig](https://github.com/dying-will-bullet/prettytable-zig) by dying-will-bullet (MIT)
 
 ## NOTE
-
-This is a completely personal tool and the author has no intention of maintaining it for anyone but himself.
-Sorry, but please be aware that issues and pull requests in this repository will be ignored.
-You are free to customize your own work using forking and source code.
 I hope that by making it open source, it will be useful to someone for something!
 
 Zig is difficult for me as a beginner, but fun! 👍

@@ -15,6 +15,8 @@ ARG ZIG_VERSION=0.13.0
 
 RUN ${ZVM_CMD} install ${ZIG_VERSION} --zls && ${ZVM_CMD} use ${ZIG_VERSION}
 
-WORKDIR /app
+WORKDIR /workspaces
 
-CMD [ "/bin/ash" ]
+ENV SHELL=/bin/bash
+
+CMD [ "/bin/bash" ]

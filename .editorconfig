@@ -1,3 +1,8 @@
+root=true
+
+[*]
+end_of_line = lf
+
 [*.zig]
 indent_style = space
 indent_size = 4
